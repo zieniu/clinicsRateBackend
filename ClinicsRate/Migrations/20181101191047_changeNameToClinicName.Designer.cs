@@ -4,14 +4,16 @@ using ClinicsRate.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ClinicsRate.Migrations
 {
     [DbContext(typeof(ClinicRateDbContext))]
-    partial class ClinicRateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181101191047_changeNameToClinicName")]
+    partial class changeNameToClinicName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,9 +27,13 @@ namespace ClinicsRate.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CityID");
+                    b.Property<int>("City");
 
                     b.Property<string>("ClinicName");
+
+                    b.Property<int?>("DictCityId");
+
+                    b.Property<int?>("DictProvinceId");
 
                     b.Property<double>("Latitude");
 
@@ -37,15 +43,15 @@ namespace ClinicsRate.Migrations
 
                     b.Property<string>("PostCode");
 
-                    b.Property<int>("ProvinceId");
+                    b.Property<int>("Province");
 
                     b.Property<string>("Street");
 
                     b.HasKey("ClinicId");
 
-                    b.HasIndex("CityID");
+                    b.HasIndex("DictCityId");
 
-                    b.HasIndex("ProvinceId");
+                    b.HasIndex("DictProvinceId");
 
                     b.ToTable("Clinics");
                 });
@@ -285,13 +291,11 @@ namespace ClinicsRate.Migrations
                 {
                     b.HasOne("ClinicsRate.Models.DictCity", "DictCity")
                         .WithMany("Clinics")
-                        .HasForeignKey("CityID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("DictCityId");
 
                     b.HasOne("ClinicsRate.Models.DictProvince", "DictProvince")
                         .WithMany("Clinics")
-                        .HasForeignKey("ProvinceId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("DictProvinceId");
                 });
 
             modelBuilder.Entity("ClinicsRate.Models.Opinion", b =>

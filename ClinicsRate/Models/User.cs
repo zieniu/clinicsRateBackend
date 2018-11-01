@@ -9,12 +9,19 @@ namespace ClinicsRate.Models
     public class User
     {
         [Key]
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public string Username { get; set; }
-        public int AccessLevel { get; set; }
+        public AccessLevel AccessLevel { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
 
         public virtual ICollection<Opinion> Opinions { get; set; }
+    }
+
+    public enum AccessLevel
+    {
+        User = 0,
+        Moderator = 1,
+        Admin = 2,
     }
 }
