@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClinicsRate.Helpers;
+using ClinicsRate.Interfaces;
+using ClinicsRate.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -37,7 +39,10 @@ namespace ClinicsRate
 
         private void RegisterDependencies(IServiceCollection services)
         {
-
+            services.AddScoped<IDictCityService, DictCityService>();
+            services.AddScoped<IClinicService, ClinicService>();
+            services.AddScoped<IDictCityService, DictCityService>();
+            services.AddScoped<IOpinionService, OpinionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,9 +53,19 @@ namespace ClinicsRate
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) =>
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync("Hello World!");
+            //});
+            app.UseMvc(routes =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
             });
         }
     }

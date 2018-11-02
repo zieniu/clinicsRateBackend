@@ -8,7 +8,7 @@ namespace ClinicsRate.Interfaces
 {
     public interface IClinicService
     {
-        IEnumerable<Clinic> GetClinics();        
+        Task<IEnumerable<Clinic>> GetClinicsAsync();        
         Task<Clinic> GetClinicAsync(int id);
         Task<int> UpdateClinicAsync(Clinic clinic);
         Task DeleteClinicAsync(int id);

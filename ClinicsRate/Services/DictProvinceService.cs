@@ -30,7 +30,7 @@ namespace ClinicsRate.Services
                 throw new Exception("Obiekt dictProvince nie może być pusty.");
             }
 
-            await _clinicRateDbContext.DictProvinces.AddAsync(dictProvince);
+            _clinicRateDbContext.DictProvinces.Add(dictProvince);
             await _clinicRateDbContext.SaveChangesAsync();
 
             return dictProvince.DictProvinceId;
@@ -62,9 +62,9 @@ namespace ClinicsRate.Services
         /// Metoda wyświetlająca wszystkie slowniki z bazy danych
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DictProvince> GetAllDictProvince()
+        public async Task<IEnumerable<DictProvince>> GetAllDictProvinceAsync()
         {
-            return _clinicRateDbContext.DictProvinces.ToList();
+            return await _clinicRateDbContext.DictProvinces.ToListAsync();
         }
 
         /// <summary>

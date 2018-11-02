@@ -30,7 +30,7 @@ namespace ClinicsRate.Services
                 throw new Exception("Obiekt dictCity nie może być pusty.");
             }
             
-            await _clinicRateDbContext.DictCities.AddAsync(dictCity);
+            _clinicRateDbContext.DictCities.Add(dictCity);
             await _clinicRateDbContext.SaveChangesAsync();
             return dictCity.DictCityId;
         }
@@ -60,9 +60,9 @@ namespace ClinicsRate.Services
         /// Metoda zwracająca wszystkie slowniki miast z bazy danych
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DictCity> GetAllDictCity()
+        public async Task<IEnumerable<DictCity>> GetAllDictCityAsync()
         {
-           return _clinicRateDbContext.DictCities.ToList();
+           return await _clinicRateDbContext.DictCities.ToListAsync();
         }
 
         public async Task<int> UpdateDictCityAsync(DictCity dictCity)

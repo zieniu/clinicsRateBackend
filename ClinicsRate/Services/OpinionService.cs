@@ -62,9 +62,9 @@ namespace ClinicsRate.Services
         /// Metoda zwracająca wszystkie opinie w bazie danych
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Opinion> GetAllOpinions()
+        public async Task<IEnumerable<Opinion>> GetAllOpinionsAsync()
         {
-            return _clinicRateDbContext.Opinions.ToList();
+            return await _clinicRateDbContext.Opinions.ToArrayAsync();
         }
 
         /// <summary>

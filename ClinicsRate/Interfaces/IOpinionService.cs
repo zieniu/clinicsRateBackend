@@ -8,7 +8,7 @@ namespace ClinicsRate.Interfaces
 {
     public interface IOpinionService
     {
-        IEnumerable<Opinion> GetAllOpinions();
+        Task<IEnumerable<Opinion>> GetAllOpinionsAsync();
         Task<int> AddOpinionAsync(Opinion opinion);
         Task<int> UpdateOpinionAsync(Opinion opinion);
         Task DeleteOpinionAsync(int opinionId);

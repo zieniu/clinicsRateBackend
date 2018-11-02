@@ -8,7 +8,7 @@ namespace ClinicsRate.Interfaces
 {
     public interface IDictProvinceService
     {
-        IEnumerable<DictProvince> GetAllDictProvince();
+        Task<IEnumerable<DictProvince>> GetAllDictProvinceAsync();
         Task<int> AddDictProvinceAsync(DictProvince dictProvince);
         Task<int> UpdateDictProvinceAsync(DictProvince dictProvince);
         Task DeleteDictProvinceAsync(int dictProvinceId);

@@ -18,6 +18,11 @@ namespace ClinicsRate.Services
             _clinicRateDbContext = clinicRateDbContext;
         }
 
+        /// <summary>
+        /// Metoda dodająca nową klinike do bazy danych
+        /// </summary>
+        /// <param name="clinic"></param>
+        /// <returns></returns>
         public async Task<int> AddClinicAsync(Clinic clinic)
         {
             if(clinic == null)
@@ -25,7 +30,7 @@ namespace ClinicsRate.Services
                 throw new Exception("Obiekt clinic nie może być pusty.");
             }
 
-            await _clinicRateDbContext.Clinics.AddAsync(clinic);
+            _clinicRateDbContext.Clinics.Add(clinic);
             await _clinicRateDbContext.SaveChangesAsync();
 
             return clinic.ClinicId;
@@ -81,9 +86,9 @@ namespace ClinicsRate.Services
         /// Metoda odpowiadajaca za wyświetlanie wszystkich klinik znajdujących się w bazie danych
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Clinic> GetClinics()
+        public async Task<IEnumerable<Clinic>> GetClinicsAsync()
         {
-            return _clinicRateDbContext.Clinics.ToList();
+            return await _clinicRateDbContext.Clinics.ToListAsync();
         }
 
 
@@ -96,7 +101,7 @@ namespace ClinicsRate.Services
         {
             if (clinic == null)
             {
-                throw new Exception("Obiekt clinic nie może być pusty.");
+                throw new Exception("Obiekt clinic nie może być pusty.");                
             }
 
             _clinicRateDbContext.Clinics.Update(clinic);
