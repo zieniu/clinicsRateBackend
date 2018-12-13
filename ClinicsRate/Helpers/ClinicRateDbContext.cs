@@ -1,14 +1,10 @@
 ﻿using ClinicsRate.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ClinicsRate.Helpers
 {
-    public class ClinicRateDbContext: IdentityDbContext
+    public class ClinicRateDbContext : DbContext
     {
         public ClinicRateDbContext(DbContextOptions<ClinicRateDbContext> options) : base(options) { }
 
@@ -17,6 +13,53 @@ namespace ClinicsRate.Helpers
         public DbSet<DictCity> DictCities { get; set; }
         public DbSet<DictProvince> DictProvinces { get; set; }
         public DbSet<Opinion> Opinions { get; set; }
+        //public DbSet<ClinicTMP> ClinicsTMP { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // ################## CLINIC #####################
+            modelBuilder.Entity<Clinic>()
+                .HasKey(c => c.ClinicId);
+
+            modelBuilder.Entity<Clinic>()
+                .HasMany<Opinion>(o => o.Opinions)
+                .WithOne(c => c.Clinic)
+                .HasForeignKey(c => c.ClinicId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // ################## OPINION #####################
+            modelBuilder.Entity<Opinion>()
+                .HasKey(o => o.OpinionId);
+
+            // ################## USER #####################
+            modelBuilder.Entity<User>()
+                .HasKey(u => u.UserId);
+
+            modelBuilder.Entity<User>()
+                .HasMany<Opinion>(o => o.Opinions)
+                .WithOne(u => u.User)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            // ################## DICTPROVINCE #####################
+            modelBuilder.Entity<DictProvince>()
+                .HasKey(p => p.DictProvinceId);
+
+            modelBuilder.Entity<DictProvince>()
+                .HasMany<Clinic>(c => c.Clinics)
+                .WithOne(p => p.DictProvince)
+                .HasForeignKey(p => p.ProvinceId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            // ################## DICTCITY #####################
+            modelBuilder.Entity<DictCity>()
+                .HasKey(c => c.DictCityId);
+
+            modelBuilder.Entity<DictCity>()
+                .HasMany<Clinic>(c => c.Clinics)
+                .WithOne(c => c.DictCity)
+                .HasForeignKey(c => c.CityId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        }
     }
 }

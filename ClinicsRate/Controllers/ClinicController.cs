@@ -1,12 +1,13 @@
 ﻿using ClinicsRate.Interfaces;
 using ClinicsRate.Models;
+using ClinicsRate.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace ClinicsRate.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/clinic")]
     [Produces("application/json")]
     public class ClinicController : Controller
     {
@@ -23,8 +24,26 @@ namespace ClinicsRate.Controllers
             return new JsonResult(await _clinicService.GetClinicsAsync());
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetClinic([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                return new JsonResult(await _clinicService.GetClinicAsync(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPut]
-        public async Task<IActionResult> UpdateClinic([FromBody] Clinic clinic)
+        public async Task<IActionResult> UpdateClinic([FromBody] ClinicDto clinic)
         {
             if (!ModelState.IsValid)
             {
@@ -37,14 +56,14 @@ namespace ClinicsRate.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e);
+                return BadRequest(e.Message);
             }
 
             return Ok(clinic.ClinicId);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddClinic([FromBody] Clinic clinic)
+        public async Task<IActionResult> AddClinic([FromBody] ClinicDto clinic)
         {
             if (!ModelState.IsValid)
             {

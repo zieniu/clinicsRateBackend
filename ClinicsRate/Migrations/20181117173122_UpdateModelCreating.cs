@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ClinicsRate.Migrations
 {
-    public partial class createDatabaseAndTable : Migration
+    public partial class UpdateModelCreating : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,33 +12,33 @@ namespace ClinicsRate.Migrations
                 name: "DictCities",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    DictCityId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DictCities", x => x.Id);
+                    table.PrimaryKey("PK_DictCities", x => x.DictCityId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "DictProvinces",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    DictProvinceId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DictProvinces", x => x.Id);
+                    table.PrimaryKey("PK_DictProvinces", x => x.DictProvinceId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Username = table.Column<string>(nullable: true),
                     AccessLevel = table.Column<int>(nullable: false),
@@ -47,40 +47,38 @@ namespace ClinicsRate.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Clinics",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ClinicId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PositionX = table.Column<double>(nullable: false),
-                    PositionY = table.Column<double>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    Longitude = table.Column<double>(nullable: false),
+                    Latitude = table.Column<double>(nullable: false),
+                    ClinicName = table.Column<string>(nullable: true),
                     Street = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PostCode = table.Column<string>(nullable: true),
-                    Province = table.Column<int>(nullable: false),
-                    DictProvinceId = table.Column<int>(nullable: true),
-                    City = table.Column<int>(nullable: false),
-                    DictCityId = table.Column<int>(nullable: true)
+                    ProvinceId = table.Column<int>(nullable: false),
+                    CityId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clinics", x => x.Id);
+                    table.PrimaryKey("PK_Clinics", x => x.ClinicId);
                     table.ForeignKey(
-                        name: "FK_Clinics_DictCities_DictCityId",
-                        column: x => x.DictCityId,
+                        name: "FK_Clinics_DictCities_CityId",
+                        column: x => x.CityId,
                         principalTable: "DictCities",
-                        principalColumn: "Id",
+                        principalColumn: "DictCityId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Clinics_DictProvinces_DictProvinceId",
-                        column: x => x.DictProvinceId,
+                        name: "FK_Clinics_DictProvinces_ProvinceId",
+                        column: x => x.ProvinceId,
                         principalTable: "DictProvinces",
-                        principalColumn: "Id",
+                        principalColumn: "DictProvinceId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -88,7 +86,7 @@ namespace ClinicsRate.Migrations
                 name: "Opinions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    OpinionId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Username = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
@@ -98,30 +96,30 @@ namespace ClinicsRate.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Opinions", x => x.Id);
+                    table.PrimaryKey("PK_Opinions", x => x.OpinionId);
                     table.ForeignKey(
                         name: "FK_Opinions_Clinics_ClinicId",
                         column: x => x.ClinicId,
                         principalTable: "Clinics",
-                        principalColumn: "Id",
+                        principalColumn: "ClinicId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Opinions_Users_UserId",
+                        name: "FK_Opinions_User_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        principalTable: "User",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clinics_DictCityId",
+                name: "IX_Clinics_CityId",
                 table: "Clinics",
-                column: "DictCityId");
+                column: "CityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clinics_DictProvinceId",
+                name: "IX_Clinics_ProvinceId",
                 table: "Clinics",
-                column: "DictProvinceId");
+                column: "ProvinceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Opinions_ClinicId",
@@ -143,7 +141,7 @@ namespace ClinicsRate.Migrations
                 name: "Clinics");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "DictCities");

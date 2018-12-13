@@ -1,4 +1,5 @@
 ﻿using System;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,6 +30,7 @@ namespace ClinicsRate
             RegisterDependencies(services);
             services.AddCors();
             services.AddMvc();
+            services.AddAutoMapper();
 
             // polaczenie do bazy danych 
             services.AddDbContext<ClinicRateDbContext>(options =>
@@ -41,7 +43,7 @@ namespace ClinicsRate
         {
             services.AddScoped<IDictCityService, DictCityService>();
             services.AddScoped<IClinicService, ClinicService>();
-            services.AddScoped<IDictCityService, DictCityService>();
+            services.AddScoped<IDictProvinceService, DictProvinceService>();
             services.AddScoped<IOpinionService, OpinionService>();
         }
 
@@ -53,10 +55,12 @@ namespace ClinicsRate
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.Run(async (context) =>
-            //{
-            //    await context.Response.WriteAsync("Hello World!");
-            //});
+            app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

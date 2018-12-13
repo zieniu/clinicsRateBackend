@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicsRate.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/dictProvince")]
     [Produces("application/json")]
     public class DictProvinceController : Controller
     {
@@ -67,7 +67,7 @@ namespace ClinicsRate.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDicProvince([FromRoute] int id)
+        public async Task<IActionResult> DeleteDictProvince([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {

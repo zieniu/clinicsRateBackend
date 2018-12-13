@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ClinicsRate.Models
 {
-    public class Clinic
+    public class ClinicTMP
     {
         public int ClinicId { get; set; }
         public double Longitude { get; set; }
@@ -22,8 +20,5 @@ namespace ClinicsRate.Models
 
         public int CityId { get; set; }
         public virtual DictCity DictCity { get; set; }
-
-
-        public virtual ICollection<Opinion> Opinions { get; set; }
     }
 }

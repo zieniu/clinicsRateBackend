@@ -8,7 +8,6 @@ namespace ClinicsRate.Models
 {
     public class DictProvince
     {
-        [Key]
         public int DictProvinceId { get; set; }
         public string Name { get; set; }
 

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicsRate.Migrations
 {
     [DbContext(typeof(ClinicRateDbContext))]
-    [Migration("20181029200537_createDatabaseAndTable")]
-    partial class createDatabaseAndTable
+    [Migration("20181117173122_UpdateModelCreating")]
+    partial class UpdateModelCreating
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,68 +23,64 @@ namespace ClinicsRate.Migrations
 
             modelBuilder.Entity("ClinicsRate.Models.Clinic", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ClinicId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("City");
+                    b.Property<int>("CityId");
 
-                    b.Property<int?>("DictCityId");
+                    b.Property<string>("ClinicName");
 
-                    b.Property<int?>("DictProvinceId");
+                    b.Property<double>("Latitude");
 
-                    b.Property<string>("Name");
+                    b.Property<double>("Longitude");
 
                     b.Property<string>("PhoneNumber");
 
-                    b.Property<double>("PositionX");
-
-                    b.Property<double>("PositionY");
-
                     b.Property<string>("PostCode");
 
-                    b.Property<int>("Province");
+                    b.Property<int>("ProvinceId");
 
                     b.Property<string>("Street");
 
-                    b.HasKey("Id");
+                    b.HasKey("ClinicId");
 
-                    b.HasIndex("DictCityId");
+                    b.HasIndex("CityId");
 
-                    b.HasIndex("DictProvinceId");
+                    b.HasIndex("ProvinceId");
 
                     b.ToTable("Clinics");
                 });
 
             modelBuilder.Entity("ClinicsRate.Models.DictCity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("DictCityId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name");
 
-                    b.HasKey("Id");
+                    b.HasKey("DictCityId");
 
                     b.ToTable("DictCities");
                 });
 
             modelBuilder.Entity("ClinicsRate.Models.DictProvince", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("DictProvinceId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name");
 
-                    b.HasKey("Id");
+                    b.HasKey("DictProvinceId");
 
                     b.ToTable("DictProvinces");
                 });
 
             modelBuilder.Entity("ClinicsRate.Models.Opinion", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("OpinionId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -98,7 +94,7 @@ namespace ClinicsRate.Migrations
 
                     b.Property<string>("Username");
 
-                    b.HasKey("Id");
+                    b.HasKey("OpinionId");
 
                     b.HasIndex("ClinicId");
 
@@ -109,7 +105,7 @@ namespace ClinicsRate.Migrations
 
             modelBuilder.Entity("ClinicsRate.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -121,20 +117,20 @@ namespace ClinicsRate.Migrations
 
                     b.Property<string>("Username");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("ClinicsRate.Models.Clinic", b =>
                 {
                     b.HasOne("ClinicsRate.Models.DictCity", "DictCity")
                         .WithMany("Clinics")
-                        .HasForeignKey("DictCityId");
+                        .HasForeignKey("CityId");
 
                     b.HasOne("ClinicsRate.Models.DictProvince", "DictProvince")
                         .WithMany("Clinics")
-                        .HasForeignKey("DictProvinceId");
+                        .HasForeignKey("ProvinceId");
                 });
 
             modelBuilder.Entity("ClinicsRate.Models.Opinion", b =>
