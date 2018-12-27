@@ -33,7 +33,7 @@ namespace ClinicsRate.Services
             {
                 throw new Exception("Obiekt clinic nie może być pusty.");
             }
-                       
+
             var cityId = await _clinicRateDbContext.DictCities.Where(s => s.Name == clinicDto.City) // pobieranie danych z bazy danych odnosnie miasta
                 .Select(c => c.DictCityId)
                 .FirstAsync();
@@ -57,7 +57,8 @@ namespace ClinicsRate.Services
                 PostCode = clinicDto.PostCode,
                 ProvinceId = provinceId,
                 Street = clinicDto.Street,
-                CityId = cityId
+                CityId = cityId,
+                Accepted = clinicDto.Accepted               
             };
 
             try
@@ -138,11 +139,63 @@ namespace ClinicsRate.Services
             IEnumerable<Clinic> clinics = await _clinicRateDbContext.Clinics
                 .Include(p => p.DictProvince)
                 .Include(c => c.DictCity)
+                .Where(c => c.Accepted == 1)
                 .ToListAsync();
 
             var clinicDto = _mapper.Map<IEnumerable<ClinicDto>>(clinics);
 
             return clinicDto;
+        }
+
+        public async Task<IList<ClinicDto>> GetClinicsByProvinceAsync(int id)
+        {
+            IEnumerable<Clinic> clinics = await _clinicRateDbContext.Clinics
+                 .Include(c => c.DictCity)
+                 .Include(o => o.Opinions)
+                 .Where(c => c.ProvinceId == id && c.Accepted == 1)
+                 .ToListAsync();
+
+            IList<ClinicDto> clinicDtos = new List<ClinicDto>();
+            foreach (var obj in clinics)
+            {
+                var avg = 0.0;
+                var sum = 0.0;
+                foreach (var rate in obj.Opinions)
+                {
+                    sum = sum + rate.Rate;
+                }
+
+                if(sum != 0)
+                {
+                    avg = sum / obj.Opinions.Count;
+                }
+
+                var clinicDto = new ClinicDto()
+                {
+                    Average = avg,
+                    City = obj.DictCity.Name,
+                    ClinicName = obj.ClinicName,
+                    PostCode = obj.PostCode,
+                    Street = obj.Street
+                };
+
+                clinicDtos.Add(clinicDto);
+            }
+
+            return clinicDtos;
+        }
+
+        public async Task<IEnumerable<ClinicDto>> GetClinicsTMPAsync()
+        {
+            IEnumerable<Clinic> clinicsTMP = await _clinicRateDbContext.Clinics
+                       .Include(p => p.DictProvince)
+                .Include(c => c.DictCity)
+                .Where(c => c.Accepted == 0)
+                .ToListAsync();
+
+            var clinicTMPDto = _mapper.Map<IEnumerable<ClinicDto>>(clinicsTMP);
+
+            return clinicTMPDto;
         }
 
 
@@ -182,7 +235,8 @@ namespace ClinicsRate.Services
                 PostCode = clinicDto.PostCode,
                 ProvinceId = provinceId,
                 Street = clinicDto.Street,
-                CityId = cityId
+                CityId = cityId,
+                Accepted = clinicDto.Accepted                
             };
 
             _clinicRateDbContext.Clinics.Update(clinic);

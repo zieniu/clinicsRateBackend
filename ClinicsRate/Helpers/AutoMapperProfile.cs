@@ -19,6 +19,9 @@ namespace ClinicsRate.Helpers
             CreateMap<ClinicDto, Clinic>()
                 .ForMember(dest => dest.ProvinceId, opt => opt.MapFrom(src => src.Province))
                 .ForMember(dest => dest.CityId, opt => opt.MapFrom(src => src.City));
+
+            CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
         }
     }
 }

@@ -16,5 +16,7 @@ namespace ClinicsRate.Models.Dtos
         public string PostCode { get; set; }
         public string Province { get; set; }
         public string City { get; set; }
+        public double Average { get; set; }
+        public int Accepted { get; set; }
     }
 }

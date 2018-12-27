@@ -4,14 +4,16 @@ using ClinicsRate.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ClinicsRate.Migrations
 {
     [DbContext(typeof(ClinicRateDbContext))]
-    partial class ClinicRateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181220173724_UzupelnienieTabeliUser_3")]
+    partial class UzupelnienieTabeliUser_3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,10 +26,6 @@ namespace ClinicsRate.Migrations
                     b.Property<int>("ClinicId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Accepted")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((0))");
 
                     b.Property<int>("CityId");
 
@@ -52,6 +50,41 @@ namespace ClinicsRate.Migrations
                     b.HasIndex("ProvinceId");
 
                     b.ToTable("Clinics");
+                });
+
+            modelBuilder.Entity("ClinicsRate.Models.ClinicTMP", b =>
+                {
+                    b.Property<int>("ClinicId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CityId");
+
+                    b.Property<string>("ClinicName");
+
+                    b.Property<int?>("DictCityId");
+
+                    b.Property<int?>("DictProvinceId");
+
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<string>("PostCode");
+
+                    b.Property<int>("ProvinceId");
+
+                    b.Property<string>("Street");
+
+                    b.HasKey("ClinicId");
+
+                    b.HasIndex("DictCityId");
+
+                    b.HasIndex("DictProvinceId");
+
+                    b.ToTable("ClinicsTMP");
                 });
 
             modelBuilder.Entity("ClinicsRate.Models.DictCity", b =>
@@ -90,7 +123,7 @@ namespace ClinicsRate.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<double>("Rate");
+                    b.Property<int>("Rate");
 
                     b.Property<int?>("UserId");
 
@@ -111,9 +144,7 @@ namespace ClinicsRate.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccessLevel")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((0))");
+                    b.Property<int>("AccessLevel");
 
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAdd()
@@ -143,6 +174,17 @@ namespace ClinicsRate.Migrations
                     b.HasOne("ClinicsRate.Models.DictProvince", "DictProvince")
                         .WithMany("Clinics")
                         .HasForeignKey("ProvinceId");
+                });
+
+            modelBuilder.Entity("ClinicsRate.Models.ClinicTMP", b =>
+                {
+                    b.HasOne("ClinicsRate.Models.DictCity", "DictCity")
+                        .WithMany()
+                        .HasForeignKey("DictCityId");
+
+                    b.HasOne("ClinicsRate.Models.DictProvince", "DictProvince")
+                        .WithMany()
+                        .HasForeignKey("DictProvinceId");
                 });
 
             modelBuilder.Entity("ClinicsRate.Models.Opinion", b =>

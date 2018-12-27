@@ -1,12 +1,14 @@
 ﻿using ClinicsRate.Interfaces;
 using ClinicsRate.Models;
 using ClinicsRate.Models.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace ClinicsRate.Controllers
 {
+    [Authorize]
     [Route("api/clinic")]
     [Produces("application/json")]
     public class ClinicController : Controller
@@ -18,14 +20,22 @@ namespace ClinicsRate.Controllers
             _clinicService = clinicService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllClinics()
         {
             return new JsonResult(await _clinicService.GetClinicsAsync());
         }
 
+        [HttpGet("clinicsTMP")]
+        public async Task<IActionResult> GetAllClinicsTMP()
+        {
+            return new JsonResult(await _clinicService.GetClinicsTMPAsync());
+        }
+
+        [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetClinic([FromRoute] int id)
+        public async Task<IActionResult> GetClinicsByProvince([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -34,13 +44,32 @@ namespace ClinicsRate.Controllers
 
             try
             {
-                return new JsonResult(await _clinicService.GetClinicAsync(id));
+                return new JsonResult(await _clinicService.GetClinicsByProvinceAsync(id));
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
         }
+
+        //[AllowAnonymous]
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetClinic([FromRoute] int id)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    try
+        //    {
+        //        return new JsonResult(await _clinicService.GetClinicAsync(id));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
 
         [HttpPut]
         public async Task<IActionResult> UpdateClinic([FromBody] ClinicDto clinic)

@@ -4,14 +4,16 @@ using ClinicsRate.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ClinicsRate.Migrations
 {
     [DbContext(typeof(ClinicRateDbContext))]
-    partial class ClinicRateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181227112518_ZmianaTabeliClinic")]
+    partial class ZmianaTabeliClinic
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,7 +29,7 @@ namespace ClinicsRate.Migrations
 
                     b.Property<int>("Accepted")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("((0))");
+                        .HasDefaultValue(1);
 
                     b.Property<int>("CityId");
 
@@ -90,7 +92,7 @@ namespace ClinicsRate.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<double>("Rate");
+                    b.Property<int>("Rate");
 
                     b.Property<int?>("UserId");
 

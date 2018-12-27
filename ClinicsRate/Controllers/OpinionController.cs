@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using ClinicsRate.Interfaces;
 using ClinicsRate.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicsRate.Controllers
 {
+    [Authorize]
     [Route("api/opinion")]
     [Produces("application/json")]
     public class OpinionController : Controller
@@ -20,10 +22,11 @@ namespace ClinicsRate.Controllers
             _opinionService = opinionService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllOpinions()
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAllOpinionsByClinicAsync([FromRoute] int id)
         {
-            return new JsonResult(await _opinionService.GetAllOpinionsAsync());
+            return new JsonResult(await _opinionService.GetAllOpinionsByClinicAsync(id));
         }
 
         [HttpPut]

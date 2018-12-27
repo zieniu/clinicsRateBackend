@@ -14,5 +14,7 @@ namespace ClinicsRate.Interfaces
         Task<int> UpdateClinicAsync(ClinicDto clinic);
         Task DeleteClinicAsync(int id);
         Task<int> AddClinicAsync(ClinicDto clinic);
+        Task<IEnumerable<ClinicDto>> GetClinicsTMPAsync();
+        Task<IList<ClinicDto>> GetClinicsByProvinceAsync(int id);
     }
 }

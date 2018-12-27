@@ -1,11 +1,13 @@
 ﻿using ClinicsRate.Interfaces;
 using ClinicsRate.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace ClinicsRate.Controllers
 {
+    [Authorize]
     [Route("api/dictCity")]
     [Produces("application/json")]
     public class DictCityController : Controller
@@ -17,6 +19,7 @@ namespace ClinicsRate.Controllers
             _dictCityService = dictCityService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllDictCity()
         {

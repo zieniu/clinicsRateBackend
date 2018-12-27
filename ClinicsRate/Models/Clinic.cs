@@ -16,6 +16,7 @@ namespace ClinicsRate.Models
         public string Street { get; set; }
         public string PhoneNumber { get; set; }
         public string PostCode { get; set; }
+        public int Accepted { get; set; }
 
         public int ProvinceId { get; set; }
         public virtual DictProvince DictProvince { get; set; }

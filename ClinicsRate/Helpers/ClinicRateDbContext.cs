@@ -1,5 +1,4 @@
 ﻿using ClinicsRate.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClinicsRate.Helpers
@@ -13,7 +12,6 @@ namespace ClinicsRate.Helpers
         public DbSet<DictCity> DictCities { get; set; }
         public DbSet<DictProvince> DictProvinces { get; set; }
         public DbSet<Opinion> Opinions { get; set; }
-        //public DbSet<ClinicTMP> ClinicsTMP { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +24,10 @@ namespace ClinicsRate.Helpers
                 .WithOne(c => c.Clinic)
                 .HasForeignKey(c => c.ClinicId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Clinic>()
+                .Property(c => c.Accepted)
+                .HasDefaultValueSql("((0))");
 
             // ################## OPINION #####################
             modelBuilder.Entity<Opinion>()
@@ -40,6 +42,14 @@ namespace ClinicsRate.Helpers
                 .WithOne(u => u.User)
                 .HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<User>()
+                .Property(usr => usr.DateCreated)
+                .HasDefaultValueSql("(getdate())");
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.AccessLevel)
+                .HasDefaultValueSql("((0))");
 
             // ################## DICTPROVINCE #####################
             modelBuilder.Entity<DictProvince>()

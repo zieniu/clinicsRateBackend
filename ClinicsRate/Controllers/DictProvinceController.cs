@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using ClinicsRate.Interfaces;
 using ClinicsRate.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicsRate.Controllers
 {
+    [Authorize]
     [Route("api/dictProvince")]
     [Produces("application/json")]
     public class DictProvinceController : Controller
@@ -20,6 +22,7 @@ namespace ClinicsRate.Controllers
             _dictProvinceService = dictProvinceService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllDictProvinces()
         {
