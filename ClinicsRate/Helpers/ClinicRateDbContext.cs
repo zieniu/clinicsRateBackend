@@ -33,6 +33,10 @@ namespace ClinicsRate.Helpers
             modelBuilder.Entity<Opinion>()
                 .HasKey(o => o.OpinionId);
 
+            modelBuilder.Entity<Opinion>()
+                .Property(op => op.DateCreated)
+                .HasDefaultValueSql("(getdate())");
+
             // ################## USER #####################
             modelBuilder.Entity<User>()
                 .HasKey(u => u.UserId);
@@ -59,7 +63,7 @@ namespace ClinicsRate.Helpers
                 .HasMany<Clinic>(c => c.Clinics)
                 .WithOne(p => p.DictProvince)
                 .HasForeignKey(p => p.ProvinceId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // ################## DICTCITY #####################
             modelBuilder.Entity<DictCity>()
@@ -69,7 +73,7 @@ namespace ClinicsRate.Helpers
                 .HasMany<Clinic>(c => c.Clinics)
                 .WithOne(c => c.DictCity)
                 .HasForeignKey(c => c.CityId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

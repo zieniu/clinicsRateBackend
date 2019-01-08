@@ -49,6 +49,7 @@ namespace ClinicsRate.Controllers
             return Ok(opinion.OpinionId);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AddOpinion([FromBody] Opinion opinion)
         {

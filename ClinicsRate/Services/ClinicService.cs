@@ -34,9 +34,25 @@ namespace ClinicsRate.Services
                 throw new Exception("Obiekt clinic nie może być pusty.");
             }
 
-            var cityId = await _clinicRateDbContext.DictCities.Where(s => s.Name == clinicDto.City) // pobieranie danych z bazy danych odnosnie miasta
-                .Select(c => c.DictCityId)
-                .FirstAsync();
+            var cityId = 0;
+
+            try
+            {
+                cityId = await _clinicRateDbContext.DictCities.Where(s => s.Name == clinicDto.City) // pobieranie danych z bazy danych odnosnie miasta
+               .Select(c => c.DictCityId)
+               .FirstAsync();
+
+                if (cityId == 0) throw new Exception("Brak podanego miasta");
+            }
+            catch (Exception)
+            {
+                DictCity newCity = new DictCity();
+                newCity.Name = clinicDto.City;
+                await _clinicRateDbContext.DictCities.AddAsync(newCity);
+                await _clinicRateDbContext.SaveChangesAsync();
+                cityId = newCity.DictCityId;
+            }          
+           
 
             var provinceId = await _clinicRateDbContext.DictProvinces.Where(s => s.Name == clinicDto.Province) // pobieranie danych z bazy danych odnosnie wojewodztwa
                 .Select(p => p.DictProvinceId)
@@ -60,16 +76,13 @@ namespace ClinicsRate.Services
                 CityId = cityId,
                 Accepted = clinicDto.Accepted               
             };
+                        
 
             try
             {
                 await _clinicRateDbContext.Clinics.AddAsync(clinic);
                 await _clinicRateDbContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            }            
             catch (Exception)
             {
                 throw;

@@ -30,6 +30,18 @@ namespace ClinicsRate.Services
                 throw new Exception("Obiekt opinion nie może być pusty.");
             }
 
+            var user = await _clinicRateDbContext.User
+                .Where(u => u.Username == opinion.Username)
+                .Select(s => s.UserId)
+                .FirstOrDefaultAsync();
+
+            if (user > 0)
+            {
+                opinion.UserId = user;
+            }
+            opinion.DateCreated = DateTime.Now;
+
+
             await _clinicRateDbContext.Opinions.AddAsync(opinion);
             await _clinicRateDbContext.SaveChangesAsync();
 
