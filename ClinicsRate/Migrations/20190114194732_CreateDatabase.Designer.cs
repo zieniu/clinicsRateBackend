@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClinicsRate.Migrations
 {
     [DbContext(typeof(ClinicRateDbContext))]
-    [Migration("20181227225724_ChangeIntToDoubleInOpinion")]
-    partial class ChangeIntToDoubleInOpinion
+    [Migration("20190114194732_CreateDatabase")]
+    partial class CreateDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -90,6 +90,10 @@ namespace ClinicsRate.Migrations
 
                     b.Property<int>("ClinicId");
 
+                    b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("(getdate())");
+
                     b.Property<string>("Description");
 
                     b.Property<double>("Rate");
@@ -140,11 +144,13 @@ namespace ClinicsRate.Migrations
                 {
                     b.HasOne("ClinicsRate.Models.DictCity", "DictCity")
                         .WithMany("Clinics")
-                        .HasForeignKey("CityId");
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("ClinicsRate.Models.DictProvince", "DictProvince")
                         .WithMany("Clinics")
-                        .HasForeignKey("ProvinceId");
+                        .HasForeignKey("ProvinceId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("ClinicsRate.Models.Opinion", b =>

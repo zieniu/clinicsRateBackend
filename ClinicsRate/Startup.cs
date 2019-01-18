@@ -96,6 +96,7 @@ namespace ClinicsRate
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
             app.UseCors(x => x
             .AllowAnyOrigin()
             .AllowAnyMethod()

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ClinicsRate.Migrations
 {
-    public partial class UpdateModelCreating : Migration
+    public partial class CreateDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,9 +41,12 @@ namespace ClinicsRate.Migrations
                     UserId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Username = table.Column<string>(nullable: true),
-                    AccessLevel = table.Column<int>(nullable: false),
                     PasswordHash = table.Column<byte[]>(nullable: true),
-                    PasswordSalt = table.Column<byte[]>(nullable: true)
+                    PasswordSalt = table.Column<byte[]>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
+                    Deleted = table.Column<int>(nullable: false),
+                    Email = table.Column<string>(nullable: true),
+                    AccessLevel = table.Column<int>(nullable: false, defaultValueSql: "((0))")
                 },
                 constraints: table =>
                 {
@@ -62,6 +65,7 @@ namespace ClinicsRate.Migrations
                     Street = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PostCode = table.Column<string>(nullable: true),
+                    Accepted = table.Column<int>(nullable: false, defaultValueSql: "((0))"),
                     ProvinceId = table.Column<int>(nullable: false),
                     CityId = table.Column<int>(nullable: false)
                 },
@@ -73,13 +77,13 @@ namespace ClinicsRate.Migrations
                         column: x => x.CityId,
                         principalTable: "DictCities",
                         principalColumn: "DictCityId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Clinics_DictProvinces_ProvinceId",
                         column: x => x.ProvinceId,
                         principalTable: "DictProvinces",
                         principalColumn: "DictProvinceId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,7 +94,8 @@ namespace ClinicsRate.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Username = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    Rate = table.Column<int>(nullable: false),
+                    Rate = table.Column<double>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "(getdate())"),
                     ClinicId = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: true)
                 },
